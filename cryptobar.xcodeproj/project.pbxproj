@@ -17,6 +17,9 @@
 		02A1178520DE12C400C6BECD /* CurrencyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1178420DE12C400C6BECD /* CurrencyPair.swift */; };
 		02A1178720DE130D00C6BECD /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1178620DE130D00C6BECD /* Currency.swift */; };
 		02A1178920E0BF6600C6BECD /* ExchangeRates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1178820E0BF6600C6BECD /* ExchangeRates.swift */; };
+		02A1178B20E12C6200C6BECD /* Portfolio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1178A20E12C6200C6BECD /* Portfolio.swift */; };
+		02A1178D20E224EF00C6BECD /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1178C20E224EF00C6BECD /* Preferences.swift */; };
+		02A1178F20E22BA500C6BECD /* PrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1178E20E22BA500C6BECD /* PrefsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +57,9 @@
 		02A1178420DE12C400C6BECD /* CurrencyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPair.swift; sourceTree = "<group>"; };
 		02A1178620DE130D00C6BECD /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		02A1178820E0BF6600C6BECD /* ExchangeRates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRates.swift; sourceTree = "<group>"; };
+		02A1178A20E12C6200C6BECD /* Portfolio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Portfolio.swift; sourceTree = "<group>"; };
+		02A1178C20E224EF00C6BECD /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		02A1178E20E22BA500C6BECD /* PrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,15 +111,18 @@
 			isa = PBXGroup;
 			children = (
 				02A1175620DA4FE100C6BECD /* AppDelegate.swift */,
+				02A1178C20E224EF00C6BECD /* Preferences.swift */,
 				02A1178220DE0FC700C6BECD /* CryptoCompareService.swift */,
 				02A1178420DE12C400C6BECD /* CurrencyPair.swift */,
 				02A1178620DE130D00C6BECD /* Currency.swift */,
 				02A1175820DA4FE100C6BECD /* ViewController.swift */,
+				02A1178E20E22BA500C6BECD /* PrefsViewController.swift */,
 				02A1175A20DA4FE200C6BECD /* Assets.xcassets */,
 				02A1175C20DA4FE200C6BECD /* Main.storyboard */,
 				02A1175F20DA4FE200C6BECD /* Info.plist */,
 				02A1176020DA4FE200C6BECD /* cryptobar.entitlements */,
 				02A1178820E0BF6600C6BECD /* ExchangeRates.swift */,
+				02A1178A20E12C6200C6BECD /* Portfolio.swift */,
 			);
 			path = cryptobar;
 			sourceTree = "<group>";
@@ -272,10 +281,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				02A1178520DE12C400C6BECD /* CurrencyPair.swift in Sources */,
+				02A1178F20E22BA500C6BECD /* PrefsViewController.swift in Sources */,
 				02A1178720DE130D00C6BECD /* Currency.swift in Sources */,
 				02A1178320DE0FC700C6BECD /* CryptoCompareService.swift in Sources */,
+				02A1178B20E12C6200C6BECD /* Portfolio.swift in Sources */,
 				02A1175920DA4FE100C6BECD /* ViewController.swift in Sources */,
 				02A1178920E0BF6600C6BECD /* ExchangeRates.swift in Sources */,
+				02A1178D20E224EF00C6BECD /* Preferences.swift in Sources */,
 				02A1175720DA4FE100C6BECD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

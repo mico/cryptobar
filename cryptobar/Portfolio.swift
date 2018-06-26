@@ -1,5 +1,5 @@
 //
-//  ExchangeRates.swift
+//  Portfolio.swift
 //  cryptobar
 //
 //  Created by Артур Комаров on 25.06.2018.
@@ -8,8 +8,14 @@
 
 import Foundation
 
-typealias ExchangeRates = [String: ExchangeRate]
-struct ExchangeRate {
+typealias Portfolio = [String: PortfolioMember]
+//    func total() {
+//        return 0;
+//    }
+
+struct PortfolioMember {
+    let currency: String
     var price: Double
     var change: Double
+    var volume: Double
 }

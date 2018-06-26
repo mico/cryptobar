@@ -28,26 +28,43 @@ struct Member: Decodable {
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
+    @IBOutlet weak var window: NSWindow!
+    
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.variableLength)
     let url = URL(string: "https://www.cryptocompare.com/portfolio/")
     fileprivate let queue = DispatchQueue(label: "requests.queue", qos: .utility)
     fileprivate let mainQueue = DispatchQueue.main
     private let cryptoCompareService = CryptoCompareService()
+    private var updateInterval: TimeInterval = 15
+    var prefs = Preferences()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         if let button = statusItem.button {
             //button.image = NSImage(named:NSImage.Name("StatusBarButtonImage"))
             button.action = #selector(printQuote(_:))
-            button.title = "B$6629.92"
-            
+            //button.title = "B$6629.92"
+            updateTitle(button)
+            Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true, block: { _ in
+                self.updateTitle(button)
+            })
+
+
 //            button.attributedTitle = NSAttributedString.boundingRect(NSAttributedString)
         }
         constructMenu()
-        searchRequest(term: "jack johnson") { json, error  in
-            print(error ?? "nil")
-            print("Update views")
+    }
+    
+
+    func updateTitle(_ button: NSStatusBarButton) {
+        searchRequest() { portfolio, error  in
+            if portfolio == nil {
+                button.title = "Update cookie!"
+            } else {
+                button.title = "Total: " + String(format: "%.0f", portfolio!.reduce(0) { $0 + ($1.value.volume * $1.value.price) }.rounded() )
+            }
         }
+
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -71,7 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.menu = menu
     }
     
-    fileprivate func make(session: URLSession = URLSession.shared, request: URLRequest, closure: @escaping (_ json: [String: Any]?, _ error: Error?)->()) {
+    fileprivate func make(session: URLSession = URLSession.shared, request: URLRequest, closure: @escaping (_ json: Portfolio?, _ error: Error?)->()) {
         let task = session.dataTask(with: request) { data, response, error in
         guard error == nil else {
             return
@@ -85,24 +102,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             result = result.components(separatedBy: "portfolioManager.setPortfolioData(")[1] as String
             result = result.components(separatedBy: ");")[0]
             
-//                    print(result)
             let decoder = JSONDecoder()
             let members = try decoder.decode(ResponseData.self, from: result.data(using: .utf8)!)
-            dump(members)
-            // members.Data.first?.Members[0].Coin?.Symbol
-            // members.Data.first?.Members[0].Amount
-            //CurrencyPair(base: Blockchain.ETH, quote: Fiat.EUR)
-            self.cryptoCompareService.getExchangeRate(for: ["ETH", "EOS"]) { exchangeRate, error in
-                guard let exchangeRate = exchangeRate else {
-                    print("Failed to fetch current exchange rate for currency pair '\("ETH")': \(error!)")
-                    return
+            var portfolio: Portfolio = [:]
+            var currencies: Set<String> = []
+            if members.Data.count == 0 {
+                closure(nil, nil)
+            } else {
+                for member in members.Data.first!.Members {
+                    if portfolio[member.Coin!.Symbol!] != nil {
+                        portfolio[member.Coin!.Symbol!]!.volume += member.Amount!
+                    } else {
+                        portfolio[member.Coin!.Symbol!] = PortfolioMember(currency: member.Coin!.Symbol!, price: 0, change: 1, volume: member.Amount!)
+                    }
+                    currencies.insert(member.Coin!.Symbol!)
                 }
-                dump(exchangeRate)
-                print("ok")
-            }
-            if let json = try JSONSerialization.jsonObject(with: result.data(using: .utf8)!, options: .mutableContainers) as? [String: Any] {
-                self.mainQueue.async {
-                    closure(json, nil)
+                self.cryptoCompareService.getExchangeRate(for: Array(currencies)) { exchangeRates, error in
+                    guard let exchangeRates = exchangeRates else {
+                        print("Failed to fetch current exchange rate for currency pair '\("ETH")': \(error!)")
+                        return
+                    }
+                    for exchangeRate in exchangeRates {
+                        portfolio[exchangeRate.key]?.price = exchangeRate.value.price
+                        portfolio[exchangeRate.key]?.change = exchangeRate.value.change
+                    }
+                    dump(portfolio)
+                    closure(portfolio, nil)
+                    print("ok")
                 }
             }
         } catch let error {
@@ -116,15 +142,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         task.resume()
     }
     
-    func searchRequest(term: String, closure: @escaping (_ json: [String: Any]?, _ error: Error?)->()) {
+    func searchRequest(closure: @escaping (_ json: Portfolio?, _ error: Error?)->()) {
         let url = URL(string: "https://www.cryptocompare.com/portfolio/")
         var request = URLRequest(url: url!)
-        request.setValue("__cfduid=d619afd5fe01ae60f6296423f611d4f601521520914; _ga=GA1.2.328201677.1521520916; G_ENABLED_IDPS=google; _gid=GA1.2.1416150890.1528269789; sid=53800E49CD0BD871B4D51F4F82ADD097E5B077020F9EADC0CE13D2B0B1E552AA29B1957F3219713BC4867A6D0DFFF468D3DEBC80C110E0CFA0FE9DFB50AAB3F2DD83C293D4DB66749401A9B88F7265B5B4FA5BCE86041481E59591BB4DAD1D7D9479341752C82839573B216F9BE54EEA41C1B1C0; _gat_UA-63634809-1=1", forHTTPHeaderField: "Cookie")
-        make(request: request) { json, error in
-            closure(json, error)
+        request.setValue(prefs.cookieValue, forHTTPHeaderField: "Cookie")
+        make(request: request) { exchangeRates, error in
+            closure(exchangeRates, error)
         }
     }
-
-
 }
 
