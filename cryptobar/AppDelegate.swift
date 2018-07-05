@@ -26,6 +26,23 @@ struct Member: Decodable {
     let Amount: Double?
 }
 
+extension String {
+    var html2Attributed: NSAttributedString? {
+        do {
+            guard let data = data(using: String.Encoding.utf8) else {
+                return nil
+            }
+            return try NSAttributedString(data: data,
+                                          options: [.documentType: NSAttributedString.DocumentType.html,
+                                                    .characterEncoding: String.Encoding.utf8.rawValue],
+                                          documentAttributes: nil)
+        } catch {
+            print("error: ", error)
+            return nil
+        }
+    }
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
@@ -52,7 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 //            button.attributedTitle = NSAttributedString.boundingRect(NSAttributedString)
         }
-        constructMenu()
+//        constructMenu()
     }
     
 
@@ -61,8 +78,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if portfolio == nil {
                 button.title = "Update cookie!"
             } else {
-                button.title = "Total: " + String(format: "%.0f", portfolio!.reduce(0) { $0 + ($1.value.volume * $1.value.price) }.rounded() )
+                button.title = String(format: "%.0f", portfolio!.reduce(0) { $0 + ($1.value.volume * $1.value.price) }.rounded() )
             }
+            self.constructMenu(portfolio!)
         }
 
     }
@@ -78,13 +96,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         print("\(quoteText) — \(quoteAuthor)")
     }
 
-    func constructMenu() {
+    func constructMenu(_ portfolio: Portfolio) {
         let menu = NSMenu()
         
-        menu.addItem(NSMenuItem(title: "Print Quote", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: "P"))
-        menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit Quotes", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
-        
+        for member in portfolio {
+            let attributes = [
+                NSAttributedStringKey.foregroundColor : (member.value.change > 0 ? NSColor.green : NSColor.red)
+            ]
+            let titlea: String = "\(member.value.currency) \(String(format: "%.4f %.1f%% %.0f", member.value.price, member.value.change, member.value.price * member.value.volume))"
+            let title: NSAttributedString = NSAttributedString(string: titlea, attributes: attributes)
+            let item: NSMenuItem = NSMenuItem(title: titlea, action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: "")
+            item.attributedTitle = title
+            menu.addItem(item)
+        }
+//        menu.addItem(NSMenuItem.separator())
+//        menu.addItem(NSMenuItem(title: "Quit Quotes", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+//
         statusItem.menu = menu
     }
     

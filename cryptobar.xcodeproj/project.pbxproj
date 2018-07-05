@@ -20,6 +20,7 @@
 		02A1178B20E12C6200C6BECD /* Portfolio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1178A20E12C6200C6BECD /* Portfolio.swift */; };
 		02A1178D20E224EF00C6BECD /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1178C20E224EF00C6BECD /* Preferences.swift */; };
 		02A1178F20E22BA500C6BECD /* PrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1178E20E22BA500C6BECD /* PrefsViewController.swift */; };
+		02A1179920E34CED00C6BECD /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1179820E34CED00C6BECD /* WebViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		02A1178A20E12C6200C6BECD /* Portfolio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Portfolio.swift; sourceTree = "<group>"; };
 		02A1178C20E224EF00C6BECD /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		02A1178E20E22BA500C6BECD /* PrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsViewController.swift; sourceTree = "<group>"; };
+		02A1179820E34CED00C6BECD /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 		02A1175520DA4FE100C6BECD /* cryptobar */ = {
 			isa = PBXGroup;
 			children = (
+				02A1179820E34CED00C6BECD /* WebViewController.swift */,
 				02A1175620DA4FE100C6BECD /* AppDelegate.swift */,
 				02A1178C20E224EF00C6BECD /* Preferences.swift */,
 				02A1178220DE0FC700C6BECD /* CryptoCompareService.swift */,
@@ -283,6 +286,7 @@
 				02A1178520DE12C400C6BECD /* CurrencyPair.swift in Sources */,
 				02A1178F20E22BA500C6BECD /* PrefsViewController.swift in Sources */,
 				02A1178720DE130D00C6BECD /* Currency.swift in Sources */,
+				02A1179920E34CED00C6BECD /* WebViewController.swift in Sources */,
 				02A1178320DE0FC700C6BECD /* CryptoCompareService.swift in Sources */,
 				02A1178B20E12C6200C6BECD /* Portfolio.swift in Sources */,
 				02A1175920DA4FE100C6BECD /* ViewController.swift in Sources */,
